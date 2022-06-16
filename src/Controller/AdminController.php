@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Produit;
 use App\Form\ProduitType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +16,12 @@ class AdminController extends AbstractController
     /**
     *@Route("/ajoutProduit", name="ajoutProduit") 
     */
-    public function ajoutProduit(Request $request)
+    public function ajoutProduit(Request $request, EntityManagerInterface $manager)
     {
+
+        // ici on injecte en dépendance l'ojet Request (de symfony)
+
+
 
         $produit=new Produit();
 
