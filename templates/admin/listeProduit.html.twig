@@ -29,7 +29,7 @@
       <td><img src="{{ asset('upload/')~produit.photo1 }}" width="100" alt="..."></td>
       <td>{{  produit.stock  }}</td>
       <td>
-      <a href="" class="btn btn-success">Modifier</a>
+      <a href="{{ path('modificationProduit', { id : produit.id }) }}" class="btn btn-success">Modifier</a>
       <a href="" class="btn btn-danger">Supprimer</a>
       
       </td>

@@ -52,6 +52,12 @@ class Produit
      */
     private $stock;
 
+
+    public $modifPhoto1;
+    public $modifPhoto2;
+    public $modifPhoto3;
+
+
     public function getId(): ?int
     {
         return $this->id;
