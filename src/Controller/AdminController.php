@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Categorie;
 use App\Entity\Produit;
+use App\Form\CategorieType;
 use App\Form\ProduitType;
+use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -191,6 +194,64 @@ class AdminController extends AbstractController
      
      return $this->redirectToRoute("listeProduit",[] ) ;
     }
+
+
+    /**
+    *@Route("/ajoutCategorie", name="ajoutCategorie") 
+    *@Route("/modificationCategorie/{id}", name="modificationCategorie") 
+    */
+    public function gestionCategorie(  EntityManagerInterface $manager, Request $request, CategorieRepository $categorieRepository, $id=null   )
+    {
+        $categories=$categorieRepository->findAll();
+
+        if ($id) {
+          $categorie=$categorieRepository->find($id);
+        } else {
+        $categorie=new Categorie();
+        }
+        
+        $form=$this->createForm(CategorieType::class, $categorie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+           
+            $manager->persist($categorie);
+            $manager->flush();
+            if ($id) {
+                $this->addFlash('success', 'Catégorie modifiée');
+            } else {
+                      $this->addFlash('success', 'Catégorie ajoutée');
+            }
+            
+      
+            return $this->redirectToRoute('ajoutCategorie');
+
+        }// fin de condition de soumission du formulaire
+
+     return $this->render("admin/gestionCategorie.html.twig",[
+            'form'=>$form->createView(),
+            'categories'=>$categories
+
+     ] ) ;
+    }
+
+
+    /**
+    *@Route("/suppressionCategorie/{id}", name="suppressionCategorie") 
+    */
+    public function suppressionCategorie(Categorie $categorie, EntityManagerInterface $manager  )
+    {
+
+     $manager->remove($categorie);
+     $manager->flush();
+     $this->addFlash('success', 'Catégorie supprimée');
+
+          
+     return $this->redirectToRoute("ajoutCategorie",[] ) ;
+    }
+
+
 
   
 
