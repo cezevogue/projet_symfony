@@ -73,6 +73,13 @@ class AdminController extends AbstractController
 
             // on demande au manager d'éxecuter la ou les requete préparées 
             $manager->flush();
+
+
+            $this->addFlash('success', 'Produit ajouté' );
+
+            return $this->redirectToRoute('listeProduit');
+
+
         } // fermeture de condition de soumission du formulaire
 
 
@@ -155,7 +162,12 @@ class AdminController extends AbstractController
             $manager->persist($produit);
 
             $manager->flush();
-        }
+
+            $this->addFlash('success', 'Produit modifié' );
+
+            return $this->redirectToRoute('listeProduit');
+
+        }//  fermeture de condition de soumission du formulaire
 
 
 
@@ -165,4 +177,24 @@ class AdminController extends AbstractController
             'produit' => $produit
         ]);
     }
+
+
+    /**
+    *@Route("/suppressionProduit/{id}", name="suppressionProduit") 
+    */
+    public function suppressionProduit(Produit $produit, EntityManagerInterface $manager   )
+    {
+        // dd('coucou');
+        $manager->remove($produit);
+        $manager->flush();
+        $this->addFlash('success', 'Produit supprimé' );
+     
+     return $this->redirectToRoute("listeProduit",[] ) ;
+    }
+
+  
+
+
+
+
 }// fermeture du controller

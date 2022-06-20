@@ -30,7 +30,7 @@
       <td>{{  produit.stock  }}</td>
       <td>
       <a href="{{ path('modificationProduit', { id : produit.id }) }}" class="btn btn-success">Modifier</a>
-      <a href="" class="btn btn-danger">Supprimer</a>
+      <a href="{{ path('suppressionProduit', { id : produit.id }) }}" onclick="return confirm('Etes vous sûr de vouloir supprimer ce produit?');" class="btn btn-danger">Supprimer</a>
       
       </td>
     </tr>
