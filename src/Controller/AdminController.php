@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Entity\Produit;
+use App\Entity\SousCategorie;
 use App\Form\CategorieType;
 use App\Form\ProduitType;
+use App\Form\SousCategorieType;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
+use App\Repository\SousCategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -249,6 +252,65 @@ class AdminController extends AbstractController
 
           
      return $this->redirectToRoute("ajoutCategorie",[] ) ;
+    }
+
+
+    /**
+    *@Route("/ajoutSousCategorie", name="ajoutSousCategorie") 
+    *@Route("/modificationSousCategorie/{id}", name="modificationSousCategorie") 
+    */
+    public function gestionSousCategorie( Request $request, EntityManagerInterface $manager, SousCategorieRepository $repository , $id=null      )
+    {
+
+        $sousCategories=$repository->findAll();
+
+        if ($id) {
+           $sousCategorie=$repository->find($id);
+        } else {
+            $sousCategorie=new SousCategorie();
+        }
+        
+       
+
+        $form=$this->createForm(SousCategorieType::class, $sousCategorie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($sousCategorie);
+            $manager->flush();
+
+            if ($id) {
+                $this->addFlash('success', 'Sous-catégorie modifiée');
+            } else {
+                $this->addFlash('success', 'Sous-catégorie ajoutée');
+            }
+            
+        
+            return $this->redirectToRoute('ajoutSousCategorie');
+           
+        }
+     
+     
+     return $this->render("admin/gestionSousCategorie.html.twig",[
+
+        'form'=>$form->createView(),
+        'sousCategories'=>$sousCategories
+
+     ] ) ;
+    }
+
+    /**
+    *@Route("/suppressionSousCategorie/{id}", name="suppressionSousCategorie") 
+    */
+    public function suppressionSousCategorie(  SousCategorie $sousCategorie, EntityManagerInterface $manager )
+    {
+        $manager->remove($sousCategorie);
+        $manager->flush();
+        $this->addFlash('success', 'Sous-catégorie supprimée');
+            
+     
+     return $this->redirectToRoute("ajoutSousCategorie",[] ) ;
     }
 
 
