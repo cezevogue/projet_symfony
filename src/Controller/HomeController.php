@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ProduitRepository;
+use App\Service\Panier\PanierService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +26,33 @@ class HomeController extends AbstractController
 
         'produits'=>$produits
 
+     ] ) ;
+    }
+
+    /**
+    *@Route("/ajoutPanier/{id}", name="ajoutPanier") 
+    */
+    public function ajoutPanier(PanierService $panier, $id )
+    {
+     $panier->ajout($id);
+
+     //dd($panier->detailPanier());
+
+     $this->addFlash('success', 'Ajouté au panier !!!');
+     
+     return $this->redirectToRoute("home",[] ) ;
+    }
+
+    /**
+    *@Route("/panier", name="panier") 
+    */
+    public function panier(PanierService $panierService)
+    {
+     
+        $panier=$panierService->detailPanier();
+     
+     return $this->render("home/panier.html.twig",[
+        'panier'=>$panier
      ] ) ;
     }
 

@@ -55,6 +55,21 @@
         <input class="form-control me-sm-2" type="text" placeholder="Search">
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
       </form>
+
+
+
+   {% if not app.user %}
+
+
+      <a href="{{ path('login') }}" class="btn btn-success">Connexion</a>
+      <a href="{{ path('inscription') }}" class="btn btn-warning">Inscription</a>
+
+  {% else %}
+  
+         <a href="{{ path('logout') }}" class="btn btn-primary">Déconnexion</a>
+
+   {% endif %}
+
     </div>
   </div>
 </nav>
