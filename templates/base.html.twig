@@ -38,17 +38,26 @@
         <li class="nav-item">
           <a class="nav-link" href=""></a>
         </li>
+        {% if app.user and is_granted('ROLE_ADMIN') %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ path('ajoutProduit') }}">Ajout produit</a>
-            <a class="dropdown-item" href="{{ path('listeProduit') }}">Liste Produits</a>
-            <a class="dropdown-item" href="{{  path('ajoutCategorie') }}">Gestion catégories</a>
-            <a class="dropdown-item" href="{{  path('ajoutSousCategorie') }}">Gestion sous-catégories</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
+             <a class="dropdown-item" href="{{ path('listeProduit') }}">Accès backoffice</a>
           </div>
         </li>
+        {% endif %}
+        {% if app.user and is_granted('ROLE_USER') %}
+                <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.username }}</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="">Mes commandes</a>
+            <a class="dropdown-item" href="">Ma wishList</a>
+           
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Mon profil</a>
+          </div>
+        </li>
+        {% endif %}
       </ul>
       <form class="d-flex">
         <input class="form-control me-sm-2" type="text" placeholder="Search">

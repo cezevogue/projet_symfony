@@ -2,6 +2,7 @@
 
 {% block body %}
 
+{% if panier is not empty  %}
 	<table class="table">
 		<thead>
 			<tr>
@@ -46,7 +47,26 @@
 
     <a href="{{ path('viderPanier') }}" class="btn btn-info">Réinitialiser</a>
 
+    {% if app.user %}
+    
+      <a href="{{ path('commande') }}" class="btn btn-warning">Commander!</a>
+      
+      {% else %}
 
+        <a href="{{ path('login') }}" class="btn btn-warning">Connectez-vous !!</a>
+        
+    {% endif %}
+
+  
+
+
+{% else %}
+    
+<div class="alert alert-info text-center w-50  mx-auto">
+<p>Votre panier est vide,   <a href="{{ path('home') }}">consultez notre catalogue</a> </p>
+</div>
+
+{% endif %}
 
 
 {% endblock %}

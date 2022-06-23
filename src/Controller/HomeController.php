@@ -144,6 +144,8 @@ class HomeController extends AbstractController
             $achat=new Achat();
             $achat->setCommande($commande);
             $achat->setProduit($item['produit']);
+            $item['produit']->setStock($item['produit']->getStock()-$item['quantite']);
+            $manager->persist($item['produit']);
             $achat->setQuantite($item['quantite']);
             $manager->persist($achat);
                  $panierService->supprimer($item['produit']->getId());
