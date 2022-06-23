@@ -13,9 +13,21 @@
 				<h5 class="card-title">{{  produit.titre   }}</h5>
 				<h5 class="card-title">{{  produit.prix   }} €</h5>
 				<p class="card-text">{{  produit.descriptif  }}</p>
+				{% if produit.stock > 0 %}
 				<a href="{{ path('ajoutPanier', { id: produit.id, param: 'home' }) }}" class="btn btn-primary">Ajouter</a>
-               <br>
-				<a href="{{ path('detailProduit', {id:produit.id}) }}">laisser un avis</a>
+               {% else %}
+				<div class="btn btn-info">Produit en rupture, en attente de réaprovisionnement</div>
+			   
+			   {% endif %}
+			   <br>
+			  
+				<a href="{{ path('detailProduit', {id:produit.id}) }}">laisser un avis</a><br><span>{{ produit.commentaire | length~' commentaires' }}</span><br>
+				{% set moyenne=0 %}
+				{% for commentaire in produit.commentaire %}
+					{% set moyenne= moyenne+commentaire.note %}
+				{% endfor %}
+					{% set moyFin=moyenne / (produit.commentaire | length ) %}
+				Note:{{ moyFin ~ '/5' }}
 			</div>
 		</div>
 {% endfor %}

@@ -74,11 +74,15 @@ class Produit
      */
     private $achats;
 
+    private $commentaire;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->achats = new ArrayCollection();
     }
+
+
 
 
     public function getId(): ?int
@@ -238,6 +242,26 @@ class Produit
                 $achat->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of commentaire
+     */ 
+    public function getCommentaire()
+    {
+        return $this->getCommentaires();
+    }
+
+    /**
+     * Set the value of commentaire
+     *
+     * @return  self
+     */ 
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
 
         return $this;
     }

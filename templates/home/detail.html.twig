@@ -45,8 +45,8 @@
 	<div class="row justify-content-between mt-5">
 
 
-		<div class="card col-md-4" style="width: 18rem;">
-			<img src="{{ asset('upload/')~produit.photo1 }}" class="card-img-top" alt="...">
+		<div class="card col-md-5 text-center">
+			<img src="{{ asset('upload/')~produit.photo1 }}" width="250" class="card-img-top" alt="...">
 			<div class="card-body">
 				<h5 class="card-title">{{  produit.titre   }}</h5>
 				<h5 class="card-title">{{  produit.prix   }}
@@ -64,7 +64,7 @@
 						<i class="rating__star far fa-star"></i>
 					</div>
 					<input type="hidden" id='note' name='note'>
-					<input type="hidden"  name='produit' value="{{ produit.id }}">
+					<input type="hidden" name='produit' value="{{ produit.id }}">
 					<div class="form-group">
 						<label for="exampleTextarea" class="form-label mt-4">commentaire</label>
 						<textarea class="form-control border" name="commentaire" id="exampleTextarea" rows="1"></textarea>
@@ -74,6 +74,15 @@
 			</div>
 		</div>
 
+		<div class="col-md-6 card">
+			{% for commentaire in produit.commentaire %}
+				<div class="alert alert-warning ms-3 me-3 mt-2 text-center">
+					<p>{{ commentaire.commentaire }}</p>
+                    <span>{{ 'Note: ' ~ commentaire.note ~ '/5' }}</span>
+				</div>
+			{% endfor %}
+		</div>
+
 
 	</div>
 
@@ -81,7 +90,7 @@
 	<script>
 		const ratingStars = [...document.getElementsByClassName("rating__star")];
 const ratingResult = document.querySelector(".rating__result");
-let note=document.getElementById('note');
+let note = document.getElementById('note');
 
 printRatingResult(ratingResult);
 
@@ -96,7 +105,7 @@ i = stars.indexOf(star);
 
 if (star.className.indexOf(starClassUnactive) !== -1) {
 printRatingResult(result, i + 1);
-let rating=0;
+let rating = 0;
 for (i; i >= 0; -- i) 
 stars[i].className = starClassActive;
 
@@ -116,7 +125,7 @@ stars[i].className = starClassUnactive;
 
 function printRatingResult(result, num = 0) {
 result.textContent = `${num}/5`;
-note.value=num
+note.value = num
 }
 
 executeRating(ratingStars, ratingResult);

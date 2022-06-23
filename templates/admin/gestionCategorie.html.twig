@@ -12,6 +12,7 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Titre</th>
+      <th scope="col">Catégorie</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -22,6 +23,7 @@
     <tr>
       <th scope="row">{{ loop.index }}</th>
       <td>{{ categorie.titre }}</td>
+      <td>{{ categorie.sousCategorie.titre }}</td>
       <td>
       <a href="{{ path('modificationCategorie', { id : categorie.id }) }}" class="btn btn-success">Modifier</a>
   <a href="{{ path('suppressionCategorie', { id : categorie.id }) }}" onclick="return confirm('Etes vous sûr de vouloir supprimer ce categorie?');" class="btn btn-danger">Supprimer</a>

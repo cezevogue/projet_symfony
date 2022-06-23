@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Categorie;
 use App\Entity\Produit;
 use PhpParser\Node\Stmt\ElseIf_;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -22,6 +24,10 @@ class ProduitType extends AbstractType
         $builder
             ->add('prix', NumberType::class,[
                 "required"=>false
+            ])
+            ->add('categorie', EntityType::class,[
+                "class"=>Categorie::class,
+                "choice_label"=>'titre'
             ])
             ->add('photo1' , FileType::class,[
                 "required"=>false
@@ -50,6 +56,10 @@ class ProduitType extends AbstractType
         $builder
         ->add('prix', NumberType::class,[
             "required"=>false
+        ])
+        ->add('categorie', EntityType::class,[
+            "class"=>Categorie::class,
+            "choice_label"=>'titre'
         ])
         ->add('modifPhoto1' , FileType::class,[
             "required"=>false
