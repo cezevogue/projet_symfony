@@ -26,12 +26,11 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="{{ path('home') }}">Accueil
-          
+          <a class="nav-link active" href="{{ path('home') }}">Accueil      
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href=""></a>
+          <a class="btn btn-warning" href="{{ path('panier') }}">Panier</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href=""></a>
@@ -65,7 +64,7 @@
       <a href="{{ path('inscription') }}" class="btn btn-warning">Inscription</a>
 
   {% else %}
-  
+
          <a href="{{ path('logout') }}" class="btn btn-primary">Déconnexion</a>
 
    {% endif %}

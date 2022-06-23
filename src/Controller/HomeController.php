@@ -2,9 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Achat;
+use App\Entity\Commande;
+use App\Entity\Commentaire;
+use App\Entity\Produit;
 use App\Repository\ProduitRepository;
 use App\Service\Panier\PanierService;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,16 +37,53 @@ class HomeController extends AbstractController
     }
 
     /**
-    *@Route("/ajoutPanier/{id}", name="ajoutPanier") 
+    *@Route("/ajoutPanier/{id}/{param}", name="ajoutPanier") 
     */
-    public function ajoutPanier(PanierService $panier, $id )
+    public function ajoutPanier(PanierService $panier, $id, $param )
     {
      $panier->ajout($id);
 
      //dd($panier->detailPanier());
 
      $this->addFlash('success', 'Ajouté au panier !!!');
+     if ($param=='home') {
+         return $this->redirectToRoute("home",[] ) ;
+     } else {
+        return $this->redirectToRoute("panier",[] ) ;
+     }
+    
+    }
+
+    /**
+    *@Route("/retraitPanier/{id}", name="retraitPanier") 
+    */
+    public function retraitPanier(PanierService $panier, $id)
+    {
+     $panier->retrait($id);
+
      
+     return $this->redirectToRoute("panier",[] ) ;
+    }
+
+        /**
+    *@Route("/supprimerPanier/{id}", name="supprimerPanier") 
+    */
+    public function supprimerPanier(PanierService $panier, $id)
+    {
+     $panier->supprimer($id);
+
+     
+     return $this->redirectToRoute("panier",[] ) ;
+    }
+
+        /**
+    *@Route("/viderPanier", name="viderPanier") 
+    */
+    public function viderPanier(PanierService $panier)
+    {
+     $panier->vider();
+
+    
      return $this->redirectToRoute("home",[] ) ;
     }
 
@@ -55,6 +99,66 @@ class HomeController extends AbstractController
         'panier'=>$panier
      ] ) ;
     }
+
+
+    /**
+    *@Route("/detailProduit/{id}", name="detailProduit") 
+    */
+    public function detailProduit(Produit $produit, Request $request, EntityManagerInterface $manager )
+    {
+
+        if(!empty($_POST))
+        {
+            $comment= new Commentaire();
+            $comment->setNote($request->request->get('note'));
+            $comment->setCommentaire($request->request->get('commentaire'));
+            $comment->setProduit($produit);
+            $manager->persist($comment);
+            $manager->flush();
+            $this->addFlash('success', 'Merci pour votre  contribution');
+            return $this->redirectToRoute('home');
+
+        }
+     
+     
+     return $this->render("home/detail.html.twig",[
+        'produit'=>$produit
+     ] ) ;
+    }
+
+    /**
+    *@Route("/commande", name="commande") 
+    */
+    public function commande( PanierService $panierService, EntityManagerInterface $manager   )
+    {
+
+        $commande = new Commande();
+        $commande->setDate(new DateTime());
+
+        $commande->setRef('Ref5000');
+        $commande->setUtilisateur($this->getUser());
+        $panier=$panierService->detailPanier();
+
+        foreach ($panier as $item) {
+           
+            $achat=new Achat();
+            $achat->setCommande($commande);
+            $achat->setProduit($item['produit']);
+            $achat->setQuantite($item['quantite']);
+            $manager->persist($achat);
+                 $panierService->supprimer($item['produit']->getId());
+
+        }
+
+        $manager->persist($commande);
+        $manager->flush();
+        $this->addFlash('success', 'Merci pour votre confiance, accédez au détail de votre commande dans votre espace  privé');
+
+     
+     
+     return $this->redirectToRoute("home",[] ) ;
+    }
+
 
 
 

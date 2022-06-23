@@ -13,7 +13,9 @@
 				<h5 class="card-title">{{  produit.titre   }}</h5>
 				<h5 class="card-title">{{  produit.prix   }} €</h5>
 				<p class="card-text">{{  produit.descriptif  }}</p>
-				<a href="{{ path('ajoutPanier', { id: produit.id }) }}" class="btn btn-primary">Ajouter</a>
+				<a href="{{ path('ajoutPanier', { id: produit.id, param: 'home' }) }}" class="btn btn-primary">Ajouter</a>
+               <br>
+				<a href="{{ path('detailProduit', {id:produit.id}) }}">laisser un avis</a>
 			</div>
 		</div>
 {% endfor %}

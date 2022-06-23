@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -61,6 +63,22 @@ class Produit
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="produits")
      */
     private $categorie;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="produit")
+     */
+    private $commentaires;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Achat::class, mappedBy="produit")
+     */
+    private $achats;
+
+    public function __construct()
+    {
+        $this->commentaires = new ArrayCollection();
+        $this->achats = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -160,6 +178,66 @@ class Produit
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getProduit() === $this) {
+                $commentaire->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Achat>
+     */
+    public function getAchats(): Collection
+    {
+        return $this->achats;
+    }
+
+    public function addAchat(Achat $achat): self
+    {
+        if (!$this->achats->contains($achat)) {
+            $this->achats[] = $achat;
+            $achat->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAchat(Achat $achat): self
+    {
+        if ($this->achats->removeElement($achat)) {
+            // set the owning side to null (unless already changed)
+            if ($achat->getProduit() === $this) {
+                $achat->setProduit(null);
+            }
+        }
 
         return $this;
     }
